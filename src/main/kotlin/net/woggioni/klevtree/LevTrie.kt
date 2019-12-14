@@ -102,45 +102,38 @@ interface ILevTrie : ICharTrie<IntArray> {
     fun fuzzySearch(word : String, maxResult: Int) : List<Pair<String, Int>> {
         val result = sortedSetOf<Pair<String, Int>>(compareBy({ it.second }, { it.first }))
         val requiredSize = word.length + 1
-        fun visitNode(stack: List<StackContext<LevNode, Unit>>) : TreeNodeVisitor.VisitOutcome {
-            if(stack.size > 1) {
+        val visitor = object: TreeNodeVisitor<LevNode, Unit> {
+            override fun visitPre(stack: List<StackContext<LevNode, Unit>>): TreeNodeVisitor.VisitOutcome {
                 val currentStackElement = stack.last()
-                if(currentStackElement.node.key == null) {
-                    val sb = StringBuilder()
-                    for(c in currentStackElement.node.linealDescendant()) {
-                        sb.append(c)
-                    }
-                    val candidate = sb.toString()
-                    val distance = stack[stack.size - 2].node.payload!![word.length]
-                    result.add(candidate to distance)
-                    if(result.size > maxResult) {
-                        result.remove(result.last())
-                    }
-                    return TreeNodeVisitor.VisitOutcome.SKIP
-                } else {
-                    return distanceCalculator.compute(keyChecker, stack, word,
-                        if(result.size == maxResult) result.last().second else -1)
-                }
-            } else {
-                return TreeNodeVisitor.VisitOutcome.CONTINUE
-            }
-        }
-        val visitor = if(root.payload == null || root.payload!!.size < requiredSize) {
-            object: TreeNodeVisitor<LevNode, Unit> {
-                override fun visitPre(stack: List<StackContext<LevNode, Unit>>): TreeNodeVisitor.VisitOutcome {
-                    val currentNode = stack.last()
+                val currentNode = currentStackElement.node
+                if(currentNode.payload == null ||
+                    currentNode.payload!!.size < requiredSize) {
                     if(stack.size == 1) {
-                        currentNode.node.payload = IntArray(requiredSize) { i -> i }
+                        currentNode.payload = IntArray(requiredSize) { i -> i }
                     } else {
-                        currentNode.node.payload = IntArray(requiredSize) { i -> if(i == 0) stack.size - 1 else 0 }
+                        currentNode.payload = IntArray(requiredSize) { i -> if(i == 0) stack.size - 1 else 0 }
                     }
-                    visitNode(stack)
+                }
+                if(stack.size > 1) {
+                    if(currentStackElement.node.key == null) {
+                        val sb = StringBuilder()
+                        for(c in currentStackElement.node.linealDescendant()) {
+                            sb.append(c)
+                        }
+                        val candidate = sb.toString()
+                        val distance = stack[stack.size - 2].node.payload!![word.length]
+                        result.add(candidate to distance)
+                        if(result.size > maxResult) {
+                            result.remove(result.last())
+                        }
+                        return TreeNodeVisitor.VisitOutcome.SKIP
+                    } else {
+                        return distanceCalculator.compute(keyChecker, stack, word,
+                            if(result.size == maxResult) result.last().second else -1)
+                    }
+                } else {
                     return TreeNodeVisitor.VisitOutcome.CONTINUE
                 }
-            }
-        } else object: TreeNodeVisitor<LevNode, Unit> {
-            override fun visitPre(stack: List<StackContext<LevNode, Unit>>): TreeNodeVisitor.VisitOutcome {
-                return visitNode(stack)
             }
         }
         val walker = TreeWalker<LevNode, Unit>(visitor)
