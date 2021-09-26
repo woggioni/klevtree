@@ -1,0 +1,19 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'application'
+}
+
+dependencies {
+    implementation group: 'net.woggioni', name: 'jwo', version: getProperty('version.jwo')
+    implementation(rootProject)
+//    runtime(files(rootProject.projectDir.toPath().resolve("src/test/resources")))
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+application {
+    mainClassName = "net.woggioni.klevtree.benchmark.BenchmarkKt"
+}

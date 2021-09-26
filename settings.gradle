@@ -1,0 +1,16 @@
+pluginManagement {
+    repositories {
+        maven {
+            url = woggioniMavenRepositoryUrl
+        }
+        gradlePluginPortal()
+    }
+
+    plugins {
+        id 'org.jetbrains.kotlin.jvm' version getProperty('version.kotlin')
+        id 'net.woggioni.gradle.multi-release-jar' version getProperty('version.multiReleaseJarPlugin')
+    }
+}
+
+rootProject.name = 'klevtree'
+include 'benchmark'

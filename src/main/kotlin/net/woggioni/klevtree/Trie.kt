@@ -1,21 +1,20 @@
 package net.woggioni.klevtree
 
-import net.woggioni.jwo.tree.StackContext
-import net.woggioni.jwo.tree.TreeNodeVisitor
-import net.woggioni.jwo.tree.TreeWalker
+import net.woggioni.jwo.TreeNodeVisitor
+import net.woggioni.jwo.TreeWalker
 import net.woggioni.klevtree.node.TrieNode
 
-interface Trie<T : TrieNode<KEY, PAYLOAD>, KEY, PAYLOAD> {
+abstract class Trie<T : TrieNode<KEY, PAYLOAD>, KEY, PAYLOAD> {
 
     interface Keychecker<KEY> {
         fun check(key1 : KEY?, key2 : KEY?) : Boolean
     }
 
-    var keyChecker : Keychecker<KEY>
+    protected abstract var keyChecker : Keychecker<KEY>
 
-    val root : TrieNode<KEY, PAYLOAD>
+    protected abstract val root : TrieNode<KEY, PAYLOAD>
 
-    val tails : MutableList<TrieNode<KEY, PAYLOAD>>
+    protected abstract val tails : MutableList<TrieNode<KEY, PAYLOAD>>
     val words : Iterable<List<KEY>>
         get() {
             val res = object : Iterator<List<KEY>> {
@@ -126,7 +125,7 @@ interface Trie<T : TrieNode<KEY, PAYLOAD>, KEY, PAYLOAD> {
     fun search(path : List<KEY>) : TrieNode<KEY, PAYLOAD>? {
         var result : TrieNode<KEY, PAYLOAD>? = null
         val visitor = object: TreeNodeVisitor<TrieNode<KEY, PAYLOAD>, Unit> {
-            override fun visitPre(stack: List<StackContext<TrieNode<KEY, PAYLOAD>, Unit>>): TreeNodeVisitor.VisitOutcome {
+            override fun visitPre(stack: List<TreeNodeVisitor.StackContext<TrieNode<KEY, PAYLOAD>, Unit>>): TreeNodeVisitor.VisitOutcome {
                 return if(stack.size == 1) {
                     TreeNodeVisitor.VisitOutcome.CONTINUE
                 } else {
@@ -147,7 +146,7 @@ interface Trie<T : TrieNode<KEY, PAYLOAD>, KEY, PAYLOAD> {
                 }
             }
         }
-        val walker = TreeWalker<TrieNode<KEY, PAYLOAD>, Unit>(visitor)
+        val walker = TreeWalker(visitor)
         walker.walk(root)
         return result
     }

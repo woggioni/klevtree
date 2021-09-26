@@ -1,8 +1,9 @@
 package net.woggioni.klevtree.node
 
-import net.woggioni.jwo.tree.TreeNode
+import net.woggioni.jwo.TreeNodeVisitor
 
-open class TrieNode<T, PAYLOAD>(val key : T?) : TreeNode<TrieNode<T, PAYLOAD>> {
+
+open class TrieNode<T, PAYLOAD>(val key : T?) : TreeNodeVisitor.TreeNode<TrieNode<T, PAYLOAD>> {
     var parent : TrieNode<T, PAYLOAD>? = null
     var child : TrieNode<T, PAYLOAD>? = null
     var next : TrieNode<T, PAYLOAD>? = null
@@ -36,21 +37,6 @@ open class TrieNode<T, PAYLOAD>(val key : T?) : TreeNode<TrieNode<T, PAYLOAD>> {
         }
         return chars.asReversed()
     }
-
-//    fun root(node: TrieNode<Char>) : String {
-//        var node : TrieNode<Char>? = node
-//        val chars = mutableListOf<Char>()
-//        while(node != null) {
-//            val key = node.key
-//            if(key != Character.MIN_VALUE) {
-//                chars.add(node.key)
-//            }
-//            node = node.parent
-//        }
-//        val sb = StringBuilder()
-//        for(c in chars.asReversed()) sb.append(c)
-//        return sb.toString()
-//    }
 }
 
 class CharNode<PAYLOAD>(key : Char?) : TrieNode<Char, PAYLOAD>(key)

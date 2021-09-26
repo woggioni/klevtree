@@ -1,14 +1,11 @@
 package net.woggioni.klevtree.benchmark
 
-import net.woggioni.klevtree.ILevTrie
 import net.woggioni.klevtree.LevTrie
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import net.woggioni.jwo.Chronometer
 
-
-
-fun main(args: Array<String>) {
+fun main() {
     val reader = BufferedReader(
         InputStreamReader(Chronometer::class.java.getResourceAsStream("/cracklib-small"))
     )
@@ -21,7 +18,7 @@ fun main(args: Array<String>) {
     } finally {
         reader.close()
     }
-    tree.algorithm = ILevTrie.Algorithm.DAMERAU_LEVENSHTEIN
+    tree.algorithm = LevTrie.Algorithm.DAMERAU_LEVENSHTEIN
     tree.caseSensitive = false
     val chr = Chronometer()
     val keys = arrayOf("camel", "coriolis", "mattel", "cruzer", "cpoper", "roublesoot")
