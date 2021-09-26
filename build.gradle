@@ -44,3 +44,21 @@ compileKotlin {
 test {
     useJUnitPlatform()
 }
+
+wrapper {
+    distributionType = Wrapper.DistributionType.BIN
+    gradleVersion = getProperty('version.gradle')
+}
+
+publishing {
+    repositories {
+        maven {
+            url = 'https://mvn.woggioni.net/'
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            from(components["java"])
+        }
+    }
+}
