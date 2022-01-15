@@ -30,9 +30,9 @@ dependencies {
     testRuntimeOnly group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: getProperty('version.log4j2')
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_11
+compileJava {
+    options.release = 8
+    options.compilerArgs << '-parameters'
 }
 
 compileKotlin {
