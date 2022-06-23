@@ -22,12 +22,13 @@ ext {
 }
 
 dependencies {
-    implementation group: 'net.woggioni', name: 'jwo', version: getProperty('version.jwo')
+    implementation platform(group: 'com.lys', name: 'lys-dependencies', version: getProperty('version.lys'))
+    implementation group: 'net.woggioni', name: 'jwo'
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: getProperty('version.junitJupiter')
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: getProperty('version.junitJupiter')
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: getProperty('version.junitJupiter')
-    testRuntimeOnly group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: getProperty('version.log4j2')
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+    testRuntimeOnly group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl'
 }
 
 compileJava {
