@@ -6,7 +6,7 @@ plugins {
 
 
 allprojects {
-    group = "woggioni.net"
+    group = "net.woggioni"
     version = getProperty('version.klevtree')
 
     repositories {
