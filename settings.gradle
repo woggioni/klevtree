@@ -5,10 +5,21 @@ pluginManagement {
         }
         gradlePluginPortal()
     }
+}
 
-    plugins {
-        id 'org.jetbrains.kotlin.jvm' version getProperty('version.kotlin')
-        id 'net.woggioni.gradle.multi-release-jar' version getProperty('version.multiReleaseJarPlugin')
+dependencyResolutionManagement {
+    repositories {
+        maven {
+            url = 'https://woggioni.net/mvn/'
+            content {
+                includeGroup 'com.lys'
+            }
+        }
+    }
+    versionCatalogs {
+        catalog {
+            from group: 'com.lys', name: 'lys-catalog', version: getProperty('lys.version')
+        }
     }
 }
 

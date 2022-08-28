@@ -1,20 +1,13 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
-    id 'application'
+    alias catalog.plugins.kotlin
+    alias catalog.plugins.envelope
 }
 
 dependencies {
-    implementation platform(group: 'com.lys', name: 'lys-dependencies', version: getProperty('version.lys'))
-    implementation group: 'net.woggioni', name: 'jwo'
+    implementation catalog.jwo
     implementation(rootProject)
-//    runtime(files(rootProject.projectDir.toPath().resolve("src/test/resources")))
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-application {
-    mainClassName = "net.woggioni.klevtree.benchmark.BenchmarkKt"
+envelopeJar {
+    mainClass = "net.woggioni.klevtree.benchmark.BenchmarkKt"
 }
