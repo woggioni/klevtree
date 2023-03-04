@@ -1,5 +1,5 @@
 plugins {
-    alias catalog.plugins.kotlin
+    alias catalog.plugins.kotlin.jvm
     alias catalog.plugins.envelope
 }
 

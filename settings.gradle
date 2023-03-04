@@ -19,6 +19,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         catalog {
             from group: 'com.lys', name: 'lys-catalog', version: getProperty('lys.version')
+            version("slf4j", "1.7.36")
         }
     }
 }

@@ -1,6 +1,6 @@
 plugins {
     id 'maven-publish'
-    alias catalog.plugins.kotlin
+    alias catalog.plugins.kotlin.jvm
     alias catalog.plugins.multi.release.jar
 }
 
@@ -27,7 +27,7 @@ dependencies {
     testImplementation catalog.junit.jupiter.api
     testImplementation catalog.junit.jupiter.params
     testRuntimeOnly catalog.junit.jupiter.engine
-    testRuntimeOnly catalog.log4j.slf4j18.impl
+    testRuntimeOnly catalog.log4j.slf4j.impl
 }
 
 compileJava {
@@ -43,11 +43,6 @@ compileKotlin {
 
 test {
     useJUnitPlatform()
-}
-
-wrapper {
-    distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = getProperty('gradle.version')
 }
 
 publishing {
