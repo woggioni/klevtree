@@ -1,8 +1,8 @@
 package net.woggioni.klevtree
 
-import net.woggioni.jwo.TreeNodeVisitor
-import net.woggioni.jwo.TreeWalker
 import net.woggioni.klevtree.node.TrieNode
+import net.woggioni.klevtree.tree.TreeNodeVisitor
+import net.woggioni.klevtree.tree.TreeWalker
 
 abstract class Trie<T : TrieNode<KEY, PAYLOAD>, KEY, PAYLOAD> {
 

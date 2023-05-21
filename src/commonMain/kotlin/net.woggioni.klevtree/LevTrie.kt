@@ -1,9 +1,9 @@
 package net.woggioni.klevtree
 
-import net.woggioni.jwo.TreeNodeVisitor
-import net.woggioni.jwo.TreeWalker
 import net.woggioni.klevtree.node.CharNode
 import net.woggioni.klevtree.node.TrieNode
+import net.woggioni.klevtree.tree.TreeNodeVisitor
+import net.woggioni.klevtree.tree.TreeWalker
 
 internal typealias LevNode = TrieNode<Char, IntArray>
 
@@ -41,7 +41,8 @@ class LevTrie : CharTrie<IntArray>() {
         }
 
     fun fuzzySearch(word : String, maxResult: Int) : List<Pair<String, Int>> {
-        val result = sortedSetOf<Pair<String, Int>>(compareBy({ it.second }, { it.first }))
+        val comparator : Comparator<Pair<String, Int>> = compareBy({ it.second }, { it.first })
+        val result = mutableListOf<Pair<String, Int>>()
         val requiredSize = word.length + 1
         val visitor = object: TreeNodeVisitor<LevNode, Unit> {
             override fun visitPre(stack: List<TreeNodeVisitor.StackContext<LevNode, Unit>>): TreeNodeVisitor.VisitOutcome {
@@ -64,6 +65,7 @@ class LevTrie : CharTrie<IntArray>() {
                         val candidate = sb.toString()
                         val distance = stack[stack.size - 2].node.payload!![word.length]
                         result.add(candidate to distance)
+                        result.sortWith(comparator)
                         if(result.size > maxResult) {
                             result.remove(result.last())
                         }

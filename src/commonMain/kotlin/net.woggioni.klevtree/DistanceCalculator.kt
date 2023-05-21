@@ -1,12 +1,14 @@
 package net.woggioni.klevtree
 
-import net.woggioni.jwo.TreeNodeVisitor
+import net.woggioni.klevtree.tree.TreeNodeVisitor
+import kotlin.math.min
+
 
 sealed class DistanceCalculator {
     abstract fun compute(keyChecker : Trie.Keychecker<Char>,
-                stack: List<TreeNodeVisitor.StackContext<LevNode, Unit>>,
-                wordkey: String,
-                worstCase : Int) : TreeNodeVisitor.VisitOutcome
+                         stack: List<TreeNodeVisitor.StackContext<LevNode, Unit>>,
+                         wordkey: String,
+                         worstCase : Int) : TreeNodeVisitor.VisitOutcome
 
     object LevenshteinDistanceCalculator : DistanceCalculator() {
         override fun compute(keyChecker : Trie.Keychecker<Char>,
@@ -21,7 +23,7 @@ sealed class DistanceCalculator {
                 if(keyChecker.check(wordkey[i - 1], currentStackElement.node.key)) {
                     currentRow[i] = previousRow[i - 1]
                 } else {
-                    currentRow[i] = Math.min(Math.min(currentRow[i - 1], previousRow[i -1]), previousRow[i]) + 1
+                    currentRow[i] = min(min(currentRow[i - 1], previousRow[i -1]), previousRow[i]) + 1
                 }
             }
             return if(worstCase >= 0 && worstCase <= currentRow.minOrNull()!!) {
@@ -45,13 +47,13 @@ sealed class DistanceCalculator {
                 if (keyChecker.check(wordkey[i - 1], cse.node.key)) {
                     crow[i] = prow[i - 1]
                 } else {
-                    crow[i] = Math.min(Math.min(crow[i - 1], prow[i - 1]), prow[i]) + 1
+                    crow[i] = min(min(crow[i - 1], prow[i - 1]), prow[i]) + 1
                 }
                 if (stack.size > 2 && i > 1 && keyChecker.check(wordkey[i - 2], cse.node.key)
                     && keyChecker.check(wordkey[i - 1], pse.node.key)) {
                     val ppse = stack[stack.size - 3]
                     val pprow: IntArray = ppse.node.payload!!
-                    crow[i] = Math.min(crow[i], pprow[i - 2] + 1)
+                    crow[i] = min(crow[i], pprow[i - 2] + 1)
                 }
             }
             return if(worstCase >= 0 && worstCase <= prow.minOrNull()!!) {

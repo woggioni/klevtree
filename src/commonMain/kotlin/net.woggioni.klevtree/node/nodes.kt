@@ -1,6 +1,6 @@
 package net.woggioni.klevtree.node
 
-import net.woggioni.jwo.TreeNodeVisitor
+import net.woggioni.klevtree.tree.TreeNodeVisitor
 
 
 open class TrieNode<T, PAYLOAD>(val key : T?) : TreeNodeVisitor.TreeNode<TrieNode<T, PAYLOAD>> {

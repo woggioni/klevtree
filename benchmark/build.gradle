@@ -1,13 +1,27 @@
 plugins {
-    alias catalog.plugins.kotlin.jvm
-    alias catalog.plugins.envelope
+    alias catalog.plugins.kotlin.multiplatform
+    alias catalog.plugins.envelope apply false
+}
+
+import net.woggioni.gradle.envelope.EnvelopeJarTask
+
+kotlin {
+    jvm()
 }
 
 dependencies {
-    implementation catalog.jwo
-    implementation(rootProject)
+    jvmMainImplementation catalog.jwo
+    jvmMainImplementation(rootProject)
 }
 
-envelopeJar {
+Provider<EnvelopeJarTask> envelopeJarTaskProvider = project.tasks.register("envelopeJar", EnvelopeJarTask.class) {
+    group = BasePlugin.BUILD_GROUP
+    description = "Package the application in a single executable jar file"
+    includeLibraries(project.configurations.named("jvmRuntimeClasspath"))
+    includeLibraries(project.getTasks().named("jvmJar", Jar.class))
     mainClass = "net.woggioni.klevtree.benchmark.BenchmarkKt"
+}
+
+project.tasks.named(BasePlugin.ASSEMBLE_TASK_NAME, DefaultTask.class) {
+    dependsOn(envelopeJarTaskProvider)
 }

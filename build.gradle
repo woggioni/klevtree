@@ -1,9 +1,10 @@
 plugins {
     id 'maven-publish'
-    alias catalog.plugins.kotlin.jvm
-    alias catalog.plugins.multi.release.jar
+    alias catalog.plugins.kotlin.multiplatform
 }
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 
 allprojects {
     group = "net.woggioni"
@@ -17,33 +18,40 @@ allprojects {
     }
 }
 
-ext {
-    setProperty('jpms.module.name', 'net.woggioni.klevtree')
-}
-
-dependencies {
-    implementation catalog.jwo
-
-    testImplementation catalog.junit.jupiter.api
-    testImplementation catalog.junit.jupiter.params
-    testRuntimeOnly catalog.junit.jupiter.engine
-    testRuntimeOnly catalog.log4j.slf4j.impl
-}
-
-compileJava {
-    options.release = 8
-    options.compilerArgs << '-parameters'
-}
-
-compileKotlin {
-    kotlinOptions.with {
-        jvmTarget = '1.8'
+kotlin {
+    sourceSets {
+        commonTest {
+            dependencies {
+                implementation group: 'org.jetbrains.kotlin',
+                        name: 'kotlin-test',
+                        version: catalog.versions.kotlin.get()
+            }
+        }
+    }
+    jvm {
+        jvmToolchain(17)
+        withJava()
+        compilations.main {
+            Action<KotlinJvmCompilerOptions> action = { KotlinJvmCompilerOptions kjco ->
+                kjco.javaParameters = true
+                kjco.jvmTarget = JvmTarget.JVM_1_8
+                kjco.moduleName = "net.woggioni.klevtree"
+            }
+            compilerOptions.configure(action)
+        }
+    }
+    linuxX64()
+    js(IR) {
+        nodejs()
     }
 }
 
-test {
-    useJUnitPlatform()
+compileJava {
+    options.release = 11
+    String patchString = 'net.woggioni.klevtree=' + kotlin.targets.jvm.compilations.main.output.classesDirs.asPath
+    options.compilerArgs << '--patch-module' << patchString
 }
+
 
 publishing {
     repositories {
@@ -53,7 +61,7 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
-            from(components["java"])
+            from(components.kotlin)
         }
     }
 }

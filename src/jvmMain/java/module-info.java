@@ -1,4 +1,4 @@
 module net.woggioni.klevtree {
-    requires net.woggioni.jwo;
+    requires kotlin.stdlib;
     exports net.woggioni.klevtree;
 }
