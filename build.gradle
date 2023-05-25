@@ -5,6 +5,7 @@ plugins {
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
+import org.apache.tools.ant.taskdefs.condition.Os
 
 allprojects {
     group = "net.woggioni"
@@ -40,9 +41,25 @@ kotlin {
             compilerOptions.configure(action)
         }
     }
-    linuxX64()
+
     js(IR) {
         nodejs()
+    }
+
+    if(Os.isFamily(Os.FAMILY_UNIX)) {
+        if(Os.isArch("amd64")) {
+            linuxX64()
+        } else if(Os.isArch("aarch64")) {
+            linuxArm64()
+        }
+    } else if(Os.isFamily(Os.FAMILY_MAC)) {
+        if(Os.isArch("amd64")) {
+            macosX64()
+        } else if(Os.isArch("aarch64")) {
+            macosArm64()
+        }
+    } else if(Os.isFamily(Os.FAMILY_WINDOWS)) {
+        mingwX64()
     }
 }
 
