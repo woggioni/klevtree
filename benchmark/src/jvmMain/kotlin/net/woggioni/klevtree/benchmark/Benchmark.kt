@@ -6,20 +6,18 @@ import java.io.InputStreamReader
 import net.woggioni.jwo.Chronometer
 
 fun main() {
-    val reader = BufferedReader(
+    val tree = LevTrie().apply {
+        caseSensitive = false
+        algorithm = LevTrie.Algorithm.DAMERAU_LEVENSHTEIN
+    }
+
+    BufferedReader(
         InputStreamReader(Chronometer::class.java.getResourceAsStream("/cracklib-small"))
-    )
-    val tree = LevTrie()
-    tree.caseSensitive = false
-    try {
+    ).use { reader ->
         for(line in reader.lines()) {
             tree.add(line.asIterable())
         }
-    } finally {
-        reader.close()
     }
-    tree.algorithm = LevTrie.Algorithm.DAMERAU_LEVENSHTEIN
-    tree.caseSensitive = false
     val chr = Chronometer()
     val keys = arrayOf("camel", "coriolis", "mattel", "cruzer", "cpoper", "roublesoot")
 
