@@ -69,11 +69,20 @@ compileJava {
     options.compilerArgs << '--patch-module' << patchString
 }
 
-
 publishing {
     repositories {
         maven {
-            url = 'https://mvn.woggioni.net/'
+            name = "Gitea"
+            url = uri("https://woggioni.net/gitea/api/packages/woggioni/maven")
+
+            credentials(HttpHeaderCredentials) {
+                name = "Authorization"
+                value = "token ${System.getenv()["PUBLISHER_TOKEN"]}"
+            }
+
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
         }
     }
     publications {
