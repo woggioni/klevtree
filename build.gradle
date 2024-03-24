@@ -85,9 +85,4 @@ publishing {
             }
         }
     }
-    publications {
-        maven(MavenPublication) {
-            from(components.kotlin)
-        }
-    }
 }
