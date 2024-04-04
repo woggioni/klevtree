@@ -13,7 +13,7 @@ allprojects {
 
     repositories {
         maven {
-            url = woggioniMavenRepositoryUrl
+            url = getProperty('gitea.maven.url')
         }
         mavenCentral()
     }
@@ -25,12 +25,12 @@ kotlin {
             dependencies {
                 implementation group: 'org.jetbrains.kotlin',
                         name: 'kotlin-test',
-                        version: catalog.versions.kotlin.get()
+                        version: catalog.versions.kotlin.asProvider().get()
             }
         }
     }
     jvm {
-        jvmToolchain(17)
+        jvmToolchain(21)
         withJava()
         compilations.main {
             Action<KotlinJvmCompilerOptions> action = { KotlinJvmCompilerOptions kjco ->
@@ -73,7 +73,7 @@ publishing {
     repositories {
         maven {
             name = "Gitea"
-            url = uri("https://woggioni.net/gitea/api/packages/woggioni/maven")
+            url = uri(getProperty('gitea.maven.url'))
 
             credentials(HttpHeaderCredentials) {
                 name = "Authorization"
