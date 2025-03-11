@@ -20,6 +20,7 @@ allprojects {
 }
 
 kotlin {
+    jvmToolchain(21)
     sourceSets {
         commonTest {
             dependencies {
@@ -30,7 +31,6 @@ kotlin {
         }
     }
     jvm {
-        jvmToolchain(21)
         withJava()
         compilations.main {
             Action<KotlinJvmCompilerOptions> action = { KotlinJvmCompilerOptions kjco ->
